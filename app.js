@@ -25,9 +25,19 @@ const start = async function() {
                 debug: true
             });
 
-            const docs = await connection.getDocList();
-
-            log(`Docs: `, docs);
+            let appHandle;
+            try {
+             appHandle = await connection.openDoc(qlikServer.appId, `` , ``, true);
+            } catch (error) {
+                // Catch App already open in different mode
+                // Try switch to another mode
+                if (error.code === 1009) {
+                    appHandle = await connection.openDoc(qlikServer.appId);
+                }
+            }
+            const appLayout = await appHandle.getLayout();
+            console.log(`Qlik Application Data: `, appLayout);
+            process.exit(0);
         } catch(error) {
             log(`ERROR: `, error);
         }
