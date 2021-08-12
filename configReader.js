@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const resolvePath = (filename) =>  path.resolve(__dirname, `./`, filename);
+const resolvePath = (filename) =>  path.resolve(`./`, filename);
 
 getQlikServers = function () {
     const readConfig = (filename) => fs.readFileSync(resolvePath(filename));

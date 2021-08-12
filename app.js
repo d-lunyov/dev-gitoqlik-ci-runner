@@ -1,30 +1,6 @@
 const qsocks = require(`qsocks`);
 const configReader = require(`./configReader`);
 const log = require(`./logger`).log;
-const fs = require("fs");
-
-function readDirAsync(path) {
-    return new Promise((resolve, reject) => {
-        fs.readdir(path, (err, files) => {
-            if (err) {
-                return resolve(err);
-            }
-            return resolve(files);
-        });
-    });
-}
-readDirAsync(`../`)
-    .then(files => {
-        console.log(`DIR ./:`);
-        console.log(files)
-    })
-
-readDirAsync(`../../`)
-    .then(files => {
-        console.log(`DIR ../../:`);
-        console.log(files)
-    })
-
 
 const start = async function() {
     log(`Reading config file...`);
@@ -58,4 +34,4 @@ const start = async function() {
     }
 }
 
-//start();
+start();
