@@ -2,12 +2,29 @@ const qsocks = require(`qsocks`);
 const configReader = require(`./configReader`);
 const log = require(`./logger`).log;
 
+function readDirAsync() {
+    return new Promise((resolve, reject) => {
+        fs.readdir('../', (err, files) => {
+            if (err) {
+                return resolve(err);
+            }
+            return resolve(files);
+        });
+    });
+}
+readDirAsync()
+    .then(files => {
+        console.log(`DIR:`);
+        console.log(files)
+    })
+
+
 const start = async function() {
     log(`Reading config file...`);
     const qlikServers = configReader.getQlikServers();
     log(`Get config success`, qlikServers);
 
-    for (let i = 0; i < qlikServers.length; i++) {
+    /*for (let i = 0; i < qlikServers.length; i++) {
         try {
             const qlikServer = qlikServers[i];
 
@@ -31,7 +48,7 @@ const start = async function() {
         } catch(error) {
             log(`ERROR: `, error);
         }
-    }
+    }*/
 }
 
 start();
