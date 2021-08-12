@@ -24,7 +24,7 @@ const start = async function() {
     const qlikServers = configReader.getQlikServers();
     log(`Get config success`, qlikServers);
 
-    /*for (let i = 0; i < qlikServers.length; i++) {
+    for (let i = 0; i < qlikServers.length; i++) {
         try {
             const qlikServer = qlikServers[i];
 
@@ -48,7 +48,7 @@ const start = async function() {
         } catch(error) {
             log(`ERROR: `, error);
         }
-    }*/
+    }
 }
 
-start();
+//start();
