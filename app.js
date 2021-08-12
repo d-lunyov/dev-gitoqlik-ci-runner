@@ -27,7 +27,7 @@ const start = async function() {
 
             let appHandle;
             try {
-                appHandle = await connection.openDoc(qlikServer.appId, `` , ``, true);
+                appHandle = await connection.openDoc(qlikServer.appId, `` , ``, ``, true);
             } catch (error) {
                 // Catch App already open in different mode
                 // Try switch to another mode
