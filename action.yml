@@ -1,0 +1,5 @@
+name: 'Gitoqlik CI process action'
+description: 'Updates Qlik applications with Gitoqlik repository data'
+runs:
+  using: 'node12'
+  main: 'app.js'
