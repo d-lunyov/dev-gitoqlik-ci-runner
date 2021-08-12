@@ -37,8 +37,8 @@ const start = async function() {
                     throw error;
                 }
             }
-            const appLayout = await appHandle.getLayout();
-            console.log(`Qlik Application Data: `, appLayout);
+            const appProperties = await appHandle.getAppProperties();
+            console.log(`Qlik Application Data: `, appProperties);
             process.exit(0);
         } catch(error) {
             log(`ERROR: `, error);
