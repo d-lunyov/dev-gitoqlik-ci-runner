@@ -1,3 +1,4 @@
+const log = require(`./logger`).log;
 const fs = require("fs");
 const path = require("path");
 
@@ -164,6 +165,7 @@ const getAppData = function() {
     return new Promise((resolve, reject) => {
         getFolderRecursive(`./`)
         .then((tree) => {
+            log(`Get repository tree:`, tree);
             let fileList = [];
 
             let isDataLoadScriptsExists = false;
@@ -209,6 +211,7 @@ const getAppData = function() {
                 isBackwardCompatibility = true;
             }
 
+            log(`Blueprint file list: `, fileList);
             Promise.all(fileList.map(function (fileData) {
                 let file = fileData.path || fileData;
 
@@ -237,6 +240,7 @@ const getAppData = function() {
                     }
                 }
 
+                log.info(`Checking file ${name}`);
                 // Check if fileList item (from objects/ folder) exists in the repository tree
                 if (!name.length || !tree.find(treeItem => treeItem.path === name)) {
                     return Promise.resolve();
