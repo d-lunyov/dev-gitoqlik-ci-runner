@@ -141,6 +141,8 @@ const getFolderRecursive = function(folderName) {
                                 if (!--pending) done(null, results);
                             });
                         } else {
+                            log(`DIRNAME: ${__dirname}`);
+                            log(`FILE: ${file}`);
                             results.push(
                                 {
                                     path: file.replace(`${__dirname}/`, ``)
@@ -240,7 +242,7 @@ const getAppData = function() {
                     }
                 }
 
-                log.info(`Checking file ${name}`);
+                log(`Checking file ${name}`);
                 // Check if fileList item (from objects/ folder) exists in the repository tree
                 if (!name.length || !tree.find(treeItem => treeItem.path === name)) {
                     return Promise.resolve();
