@@ -124,7 +124,7 @@ const Utils = {
     }
 }
 
-const getFolderRecursive = function(folderName) {
+const getFolderRecursive = function(folderName, opts) {
     return new Promise((resolve, reject) => {
         const workFolder = path.resolve(`./`);
 
@@ -135,21 +135,27 @@ const getFolderRecursive = function(folderName) {
                 let pending = list.length;
                 if (!pending) return done(null, results);
                 list.forEach(function(file) {
-                    file = path.resolve(dir, file);
-                    fs.stat(file, function(err, stat) {
+
+                    let fileFullPath = path.resolve(dir, file);
+                    fs.stat(fileFullPath, function(err, stat) {
                         if (stat && stat.isDirectory()) {
-                            walk(file, function(err, res) {
-                                results = results.concat(res);
+                            if (opts.excludeFolders && opts.excludeFolders.indexOf(file) > -1) {
                                 if (!--pending) done(null, results);
-                            });
+                            } else {
+                                walk(fileFullPath, function (err, res) {
+                                    results = results.concat(res);
+                                    if (!--pending) done(null, results);
+                                });
+                            }
                         } else {
                             results.push(
                                 {
-                                    path: file.replace(`${workFolder}/`, ``)
+                                    path: fileFullPath.replace(`${workFolder}/`, ``)
                                 });
                             if (!--pending) done(null, results);
                         }
                     });
+
                 });
             });
         };
@@ -165,10 +171,10 @@ const getFolderRecursive = function(folderName) {
 
 const getAppData = function() {
     return new Promise((resolve, reject) => {
-        getFolderRecursive(`./`)
+        getFolderRecursive(`./`, {excludeFolders: `.git`})
         .then((tree) => {
             log(`Get repository tree:`, tree);
-            let fileList = [];
+            let fileList = Options.storedAppObjects;
 
             let isDataLoadScriptsExists = false;
             // Backward compatibility with single script.qvs file
