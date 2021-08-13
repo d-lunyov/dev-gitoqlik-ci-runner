@@ -7,7 +7,7 @@ const qdes = require(`./qdes/qdes`);
 const openDoc = async function(connection, appId) {
     let appHandle;
     try {
-        appHandle = await connection.openDoc(appId, `` , ``, true);
+        appHandle = await connection.openDoc(appId, `` , ``, ``, true);
     } catch (error) {
         // Catch App already open in different mode
         // Try switch to another mode
