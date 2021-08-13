@@ -11,7 +11,6 @@ function apply(app, blueprint, isImport) {
     return Promise.resolve()
         .then(function () {
             if (blueprint.script) {
-                log(`Setting new load script...`);
                 return app.setScript(blueprint.script);
             }
         })

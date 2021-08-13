@@ -4,6 +4,22 @@ const log = require(`./logger`).log;
 const appDataReader = require(`./appDataReader`);
 const qdes = require(`./qdes/qdes`);
 
+const openDoc = async function(connection, appId) {
+    let appHandle;
+    try {
+        appHandle = await connection.openDoc(appId, `` , ``, true);
+    } catch (error) {
+        // Catch App already open in different mode
+        // Try switch to another mode
+        if (error.code === 1009) {
+            appHandle = await connection.openDoc(appId);
+        } else {
+            throw error;
+        }
+    }
+    return appHandle;
+}
+
 const start = async function() {
     log(`Reading config file...`);
     const qlikServers = configReader.getQlikServers();
@@ -31,8 +47,11 @@ const start = async function() {
                 debug: true
             });
 
+            log(`Opening an app ${qlikServer.appId}...`);
+            let appHandle = await openDoc(connection, qlikServer.appId);
+
             log(`Updating Qlik applications with Gitoqlik data...`);
-            const updateData = await qdes.apply(connection, appData, false);
+            const updateData = await qdes.apply(appHandle, appData, false);
             log(`UpdateData: `, updateData);
 
             if (updateData.applyErrors.length) {
