@@ -1,5 +1,4 @@
-var Promise = require('bluebird');
-const Options = require(`../options`);
+const Promise = require('bluebird');
 
 /**
  * Manages object removal in a blueprint.
