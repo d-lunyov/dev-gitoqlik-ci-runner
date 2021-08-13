@@ -1,17 +1,22 @@
 const qsocks = require(`qsocks`);
 const configReader = require(`./configReader`);
 const log = require(`./logger`).log;
+const appDataReader = require(`./appDataReader`);
 
 const start = async function() {
     log(`Reading config file...`);
     const qlikServers = configReader.getQlikServers();
     log(`Get config success`, qlikServers);
 
+    log(`Reading Gitoqlik application data...`);
+    const appData = await appDataReader.getAppData();
+    log(`Read Gitoqlik application data success`, appData);
+
     for (let i = 0; i < qlikServers.length; i++) {
         try {
             const qlikServer = qlikServers[i];
 
-            log(`Connecting to the qlikServer.host:${qlikServer.port || 4747}...`);
+            log(`Connecting to the ${qlikServer.host}:${qlikServer.port || 4747}...`);
             const connection = await qsocks.Connect({
                 ca: [configReader.getCertificate(qlikServer.ca)],
                 key: configReader.getCertificate(qlikServer.key),
@@ -39,12 +44,14 @@ const start = async function() {
             }
             const appProperties = await appHandle.getAppProperties();
             console.log(`Qlik Application Data: `, appProperties);
-            process.exit(0);
         } catch(error) {
+            log(`Skipping ${qlikServer.host}`);
             log(`ERROR: `, error);
-            process.exit(0);
+            continue;
         }
     }
+
+    process.exit(0);
 }
 
 start();

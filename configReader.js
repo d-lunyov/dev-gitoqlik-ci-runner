@@ -1,18 +1,16 @@
 const fs = require("fs");
 const path = require("path");
+
 const resolvePath = (filename) =>  path.resolve(`./`, filename);
+const readFile = (filename) => fs.readFileSync(resolvePath(filename), `utf8`);
 
-getQlikServers = function () {
-    const readConfig = (filename) => fs.readFileSync(resolvePath(filename));
-
-    const config = JSON.parse(readConfig(`config.json`));
+const getQlikServers = function () {
+    const config = JSON.parse(readFile(`config.json`));
     return config.qlikServers || [];
 }
 
-getCertificate = function(filePath) {
-    const readCert = (filename) => fs.readFileSync(resolvePath(filename));
-
-    return readCert(filePath);
+const getCertificate = function(filePath) {
+    return readFile(filePath);
 }
 
 module.exports = {
