@@ -33,6 +33,8 @@ const start = async function() {
 
             log(`Updating Qlik applications with Gitoqlik data...`);
             const updateData = await qdes.apply(connection, appData, false);
+            log(`UpdateData: `, updateData);
+
             if (updateData.applyErrors.length) {
                 log(`Update done with errors: ${updateData.applyErrors.join(";")}`)
             } else {

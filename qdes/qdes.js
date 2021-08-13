@@ -1,6 +1,7 @@
 const Promise = require('bluebird');
 const METHODS = require('./assemble-blueprint');
 const resolveDeletions = require('./resolve-deletions');
+const log = require(`../logger`).log;
 
 function apply(app, blueprint, isImport) {
     let applyErrors = [];
@@ -10,6 +11,7 @@ function apply(app, blueprint, isImport) {
     return Promise.resolve()
         .then(function () {
             if (blueprint.script) {
+                log(`Setting new load script...`);
                 return app.setScript(blueprint.script);
             }
         })
@@ -23,7 +25,7 @@ function apply(app, blueprint, isImport) {
         })
         .then(function (appObjectList) {
             return Promise.each(METHODS_MAP, async function (method) {
-                Log.info("[CS] apply ", {method});
+                log("[CS] apply ", {method});
                 if (blueprint[method] && blueprint[method].length) {
                     return Promise.all(blueprint[method].map(function (definition) {
                         return METHODS[method](app, definition, appObjectList, blueprint)
