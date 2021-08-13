@@ -126,6 +126,8 @@ const Utils = {
 
 const getFolderRecursive = function(folderName) {
     return new Promise((resolve, reject) => {
+        const workFolder = path.resolve(`./`);
+
         const walk = function(dir, done) {
             let results = [];
             fs.readdir(dir, function(err, list) {
@@ -141,11 +143,9 @@ const getFolderRecursive = function(folderName) {
                                 if (!--pending) done(null, results);
                             });
                         } else {
-                            log(`DIRNAME: ${__dirname}`);
-                            log(`FILE: ${file}`);
                             results.push(
                                 {
-                                    path: file.replace(`${__dirname}/`, ``)
+                                    path: file.replace(`${workFolder}/`, ``)
                                 });
                             if (!--pending) done(null, results);
                         }

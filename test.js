@@ -44,4 +44,6 @@ const getFolderRecursive = function(folderName) {
 getFolderRecursive(`./`)
 .then(data => {
     //console.log(data);
+    console.log(path.resolve(`./`));
 })
+
