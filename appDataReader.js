@@ -161,7 +161,8 @@ const getFolderRecursive = function(folderName) {
 }
 
 const getAppData = function() {
-    getFolderRecursive(`./`)
+    return new Promise((resolve, reject) => {
+        getFolderRecursive(`./`)
         .then((tree) => {
             let fileList = [];
 
@@ -468,6 +469,7 @@ const getAppData = function() {
                     return reject(error);
             })
         })
+    });
 }
 
 module.exports = {
