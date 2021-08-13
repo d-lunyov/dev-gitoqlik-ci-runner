@@ -173,7 +173,6 @@ const getAppData = function() {
     return new Promise((resolve, reject) => {
         getFolderRecursive(`./`, {excludeFolders: `.git`})
         .then((tree) => {
-            log(`Get repository tree:`, tree);
             let fileList = Options.storedAppObjects;
 
             let isDataLoadScriptsExists = false;
@@ -248,7 +247,6 @@ const getAppData = function() {
                     }
                 }
 
-                log(`Checking file ${name}`);
                 // Check if fileList item (from objects/ folder) exists in the repository tree
                 if (!name.length || !tree.find(treeItem => treeItem.path === name)) {
                     return Promise.resolve();
