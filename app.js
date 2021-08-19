@@ -73,7 +73,7 @@ const start = async function() {
                 headers: {
                     "X-Qlik-User": `UserDirectory=${encodeURIComponent(qlikServer.userDirectory)}; UserId=${encodeURIComponent(qlikServer.userId)}`,
                 },
-                debug: true
+                debug: false
             });
 
             log(`Opening an app ${qlikServer.appId}...`);
