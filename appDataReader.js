@@ -2,9 +2,9 @@ const log = require(`./logger`).log;
 const fs = require("fs");
 const path = require("path");
 
-const readFile = (filename) => {
+const readFile = (filename, isBinary) => {
     return new Promise((resolve, reject) => {
-        fs.readFile(filename, `utf8`, (err, data) => {
+        fs.readFile(filename, isBinary ? undefined : `utf8`, (err, data) => {
             if (err) {
                 return reject(err);
             }

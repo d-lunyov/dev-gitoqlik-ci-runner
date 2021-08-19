@@ -18,12 +18,10 @@ const updateQlikAppcontentFiles = function (files, qlikServer) {
 
     return Promise.all(files.map(async file => {
         log(`[QRS] Sending file ${file.name}...`);
-        /*const fd = new FormData();
-        fd.append('file', file.content, file.name);*/
         qrsSession.Post(
             `appcontent/${qlikServer.appId}/uploadfile?externalpath=${encodeURIComponent(file.name)}&overwrite=true`,
             file.content,
-            `'multipart/form-data'`)
+            `image/*`)
             .then(data => {
                 log(`[QRS] Send file ${file.name} success`, data);
             })
