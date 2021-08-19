@@ -21,6 +21,31 @@ const openDoc = async function(connection, appId) {
     return appHandle;
 }
 
+const updateThumbnailUrls = function (appData, appId) {
+    const replaceAppidInPath = function(path) {
+        return path.replace(/appcontent\/[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}/i, `appcontent/${appId}`);
+    }
+
+    let properties = appData.properties;
+    if (properties && properties.qThumbnail && properties.qThumbnail.qUrl) {
+        properties.qThumbnail.qUrl = replaceAppidInPath(properties.qThumbnail.qUrl);
+        log(`new properties thumb url: `, properties.qThumbnail.qUrl);
+    }
+
+    let props = appData.appprops && appData.appprops[0];
+    if (props && props.qProperty.sheetLogoThumbnail.qStaticContentUrlDef.qUrl) {
+        props.qProperty.sheetLogoThumbnail.qStaticContentUrlDef.qUrl = replaceAppidInPath(props.qProperty.sheetLogoThumbnail.qStaticContentUrlDef.qUrl);
+        log(`new props thumb url: `, props.qProperty.sheetLogoThumbnail.qStaticContentUrlDef.qUrl);
+    }
+
+    appData.sheets && appData.sheets.forEach(sheet => {
+        if (sheet.qProperty.thumbnail.qStaticContentUrlDef && sheet.qProperty.thumbnail.qStaticContentUrlDef.qUrl) {
+            sheet.qProperty.thumbnail.qStaticContentUrlDef.qUrl = replaceAppidInPath(sheet.qProperty.thumbnail.qStaticContentUrlDef.qUrl);
+            log(`new sheet thumb url: `, sheet.qProperty.thumbnail.qStaticContentUrlDef.qUrl);
+        }
+    });
+}
+
 const start = async function() {
     log(`Reading config file...`);
     const qlikServers = configReader.getQlikServers();
@@ -34,6 +59,9 @@ const start = async function() {
         const qlikServer = qlikServers[i];
 
         try {
+            log(`Updating thumbnail urls with new app id...`);
+            updateThumbnailUrls(appData, qlikServer.appId);
+
             log(`Connecting to the ${qlikServer.host}:${qlikServer.port || 4747}...`);
             const connection = await qsocks.Connect({
                 ca: [configReader.getCertificate(qlikServer.ca)],
