@@ -3,6 +3,7 @@ const configReader = require(`./configReader`);
 const log = require(`./logger`).log;
 const appDataReader = require(`./appDataReader`);
 const qdes = require(`./qdes/qdes`);
+const qrs = require(`./qdes/qrs`);
 
 const openDoc = async function(connection, appId) {
     let appHandle;
@@ -58,6 +59,12 @@ const start = async function() {
                 log(`Update done with errors: ${updateData.applyErrors.join(";")}`)
             } else {
                 log(`Update success`);
+            }
+
+            if (appData.appcontent) {
+                log(`Updating binary files...`)
+                await qrs.updateQlikAppcontentFiles(appData.appcontent, qlikServer);
+                log(`Updating binary files done.`)
             }
         } catch(error) {
             log(`Skipping ${qlikServer.host}`);
