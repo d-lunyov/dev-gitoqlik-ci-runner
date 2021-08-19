@@ -62,6 +62,12 @@ const start = async function() {
             log(`Updating thumbnail urls with new app id...`);
             updateThumbnailUrls(appData, qlikServer.appId);
 
+            if (appData.appcontent) {
+                log(`Updating binary files...`)
+                await qrs.updateQlikAppcontentFiles(appData.appcontent, qlikServer);
+                log(`Updating binary files done.`)
+            }
+
             log(`Connecting to the ${qlikServer.host}:${qlikServer.port || 4747}...`);
             const connection = await qsocks.Connect({
                 ca: [configReader.getCertificate(qlikServer.ca)],
@@ -87,12 +93,6 @@ const start = async function() {
                 log(`Update done with errors: ${updateData.applyErrors.join(";")}`)
             } else {
                 log(`Update success`);
-            }
-
-            if (appData.appcontent) {
-                log(`Updating binary files...`)
-                await qrs.updateQlikAppcontentFiles(appData.appcontent, qlikServer);
-                log(`Updating binary files done.`)
             }
         } catch(error) {
             log(`Skipping ${qlikServer.host}`);
