@@ -6,13 +6,13 @@ const updateQlikAppcontentFiles = function (files, qlikServer) {
     if (!files || files.length === 0) {
         return;
     }
-    log(`[QRS] Connecting to ${qlikServer.host}...`);
 
+    log(`[QRS] Connecting to ${qlikServer.host}...`);
     const qrsSession = new qrsInteract({
         hostname: qlikServer.host,
         certificates: {
-            certFile: configReader.getCertificate(qlikServer.cert),
-            keyFile: configReader.getCertificate(qlikServer.key)
+            certFile: qlikServer.cert,
+            keyFile: qlikServer.key
         }
     });
 
