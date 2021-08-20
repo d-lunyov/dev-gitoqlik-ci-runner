@@ -56,46 +56,64 @@ const start = async function() {
     log(`Read Gitoqlik application data success`, appData);
 
     for (let i = 0; i < qlikServers.length; i++) {
-        const qlikServer = qlikServers[i];
+        const qlikServerConfig = qlikServers[i];
 
         try {
             log(`Updating thumbnail urls with new app id...`);
-            updateThumbnailUrls(appData, qlikServer.appId);
+            updateThumbnailUrls(appData, qlikServerConfig.appId);
 
             if (appData.appcontent) {
                 log(`Updating binary files...`)
-                await qrs.updateQlikAppcontentFiles(appData.appcontent, qlikServer);
+                await qrs.updateQlikAppcontentFiles(appData.appcontent, qlikServerConfig);
                 log(`Updating binary files done.`)
             }
 
-            log(`Connecting to the ${qlikServer.host}:${qlikServer.port || 4747}...`);
+            log(`Connecting to the ${qlikServerConfig.host}:${qlikServerConfig.port || 4747}...`);
             const connection = await qsocks.Connect({
-                ca: [configReader.getCertificate(qlikServer.ca)],
-                key: configReader.getCertificate(qlikServer.key),
-                cert: configReader.getCertificate(qlikServer.cert),
+                ca: [configReader.getCertificate(qlikServerConfig.ca)],
+                key: configReader.getCertificate(qlikServerConfig.key),
+                cert: configReader.getCertificate(qlikServerConfig.cert),
                 isSecure: true,
-                host: qlikServer.host,
-                port: qlikServer.port || 4747,
+                host: qlikServerConfig.host,
+                port: qlikServerConfig.port || 4747,
                 headers: {
-                    "X-Qlik-User": `UserDirectory=${encodeURIComponent(qlikServer.userDirectory)}; UserId=${encodeURIComponent(qlikServer.userId)}`,
+                    "X-Qlik-User": `UserDirectory=${encodeURIComponent(qlikServerConfig.userDirectory)}; UserId=${encodeURIComponent(qlikServerConfig.userId)}`,
                 },
                 debug: false
             });
 
-            log(`Opening an app ${qlikServer.appId}...`);
-            let appHandle = await openDoc(connection, qlikServer.appId);
+            log(`Opening app ${qlikServerConfig.appId}...`);
+            let appHandle = await openDoc(connection, qlikServerConfig.appId);
 
-            log(`Updating Qlik applications with Gitoqlik data...`);
-            const updateData = await qdes.apply(appHandle, appData, false);
-            log(`UpdateData: `, updateData);
+            if (appData.script) {
+                try {
+                    log(`Updating application reload script...`);
+                    await appHandle.setScript(appData.script);
+                    log(`Update application reload script success`);
+                } catch (error) {
+                    log(`ERROR update application reload script`, error);
+                }
 
+                if (qlikServerConfig.doReload) {
+                    try {
+                        log(`Reload application data...`);
+                        await appHandle.doReload(0, false, false);
+                        log(`Reload application data success`);
+                    } catch (error) {
+                        log(`ERROR reload application data`, error);
+                    }
+                }
+            }
+
+            log(`Updating Qlik application with Gitoqlik data...`);
+            const updateData = await qdes.apply(appHandle, appData);
             if (updateData.applyErrors.length) {
                 log(`Update done with errors: ${updateData.applyErrors.join(";")}`)
             } else {
                 log(`Update success`);
             }
         } catch(error) {
-            log(`Skipping ${qlikServer.host}`);
+            log(`Skipping ${qlikServerConfig.host}`);
             log(`ERROR: `, error);
             continue;
         }

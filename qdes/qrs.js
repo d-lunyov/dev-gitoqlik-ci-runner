@@ -1,4 +1,3 @@
-const configReader = require(`../configReader`);
 const qrsInteract = require('qrs-interact');
 const log = require(`../logger`).log;
 
@@ -17,17 +16,17 @@ const updateQlikAppcontentFiles = function (files, qlikServer) {
     });
 
     return Promise.all(files.map(async file => {
-        log(`[QRS] Sending file ${file.name}...`);
+        log(`[QRS] Uploading file ${file.name}...`);
         return qrsSession.Post(
             `appcontent/${qlikServer.appId}/uploadfile?externalpath=${encodeURIComponent(file.name)}&overwrite=true`,
             file.content,
             `image/*`)
             .then(data => {
-                log(`[QRS] Send file ${file.name} success`, data);
+                log(`[QRS] Upload file ${file.name} success`, data);
                 return Promise.resolve();
             })
             .catch(error => {
-                log(`Error while uploading file ${file.name}`, error)
+                log(`[QRS] Error while uploading file ${file.name}`, error)
                 return Promise.resolve();
             });
 

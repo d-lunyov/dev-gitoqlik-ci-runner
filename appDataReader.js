@@ -50,7 +50,7 @@ const Utils = {
     },
     getIndicesOf: function (searchStr, str, caseSensitive) {
         let searchStrLen = searchStr.length;
-        if (searchStrLen == 0) {
+        if (searchStrLen === 0) {
             return [];
         }
         let startIndex = 0, index, indices = [];

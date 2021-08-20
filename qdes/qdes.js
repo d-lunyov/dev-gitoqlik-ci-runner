@@ -3,20 +3,12 @@ const METHODS = require('./assemble-blueprint');
 const resolveDeletions = require('./resolve-deletions');
 const log = require(`../logger`).log;
 
-function apply(app, blueprint, isImport) {
+const apply = function (app, blueprint, isImport, doReload) {
     let applyErrors = [];
     const METHODS_MAP = ['sheets', 'measures', 'dimensions', 'masterobjects', 'snapshots', 'stories',
         'variables', 'bookmarks', 'appprops', 'properties', 'fields', 'alternatestates'];
 
-    return Promise.resolve()
-        .then(function () {
-            if (blueprint.script) {
-                return app.setScript(blueprint.script);
-            }
-        })
-        .then(function () {
-            return app.getAllInfos();
-        })
+    return app.getAllInfos()
         .then(function (info) {
             return info.qInfos.map(function (zip) {
                 return zip.qId;
@@ -24,7 +16,7 @@ function apply(app, blueprint, isImport) {
         })
         .then(function (appObjectList) {
             return Promise.each(METHODS_MAP, async function (method) {
-                log("[CS] apply ", {method});
+                log("Updating ", {method});
                 if (blueprint[method] && blueprint[method].length) {
                     return Promise.all(blueprint[method].map(function (definition) {
                         return METHODS[method](app, definition, appObjectList, blueprint)
@@ -37,11 +29,11 @@ function apply(app, blueprint, isImport) {
                                     try {
                                         error.objectType = method;
                                         error = JSON.stringify(error);
-                                    } catch(JSONerr) {
+                                    } catch (JSONerr) {
                                     }
                                 }
-                            applyErrors.push(error);
-                        });
+                                applyErrors.push(error);
+                            });
                     }))
                 } else {
                     return Promise.resolve();
@@ -49,7 +41,7 @@ function apply(app, blueprint, isImport) {
             })
         })
         .then(function () {
-            if (!isImport && blueprint.blueprintObjectList && blueprint.blueprintObjectList.qInfos) {
+            if (blueprint.blueprintObjectList && blueprint.blueprintObjectList.qInfos) {
                 return resolveDeletions(app, blueprint);
             }
         })
@@ -66,8 +58,8 @@ function apply(app, blueprint, isImport) {
         .then(function () {
             return Promise.resolve({success: true, applyErrors});
         });
-};
+}
 
 module.exports = {
     apply: apply
-};
+}
