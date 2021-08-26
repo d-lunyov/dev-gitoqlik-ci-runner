@@ -91,11 +91,16 @@ const start = async function() {
 
             if (qlikServerConfig.createNewApp) {
                 log(`Creating new app ...`);
-                let createdAppData = await createApp(connection, qlikServerConfig.createNewAppName);
+
+                /*let createdAppData = await createApp(connection, qlikServerConfig.createNewAppName);
                 if (!createdAppData.qSuccess) {
                     throw new Error(`Create new app failed`);
                 }
-                qlikServerConfig.appId = createdAppData.qAppId;
+                qlikServerConfig.appId = createdAppData.qAppId;*/
+
+                let result = await qrs.createApp(qlikServerConfig, qlikServerConfig.createNewAppName);
+                qlikServerConfig.appId = result.body.data.id;
+
                 log(`Create app success, id: ${qlikServerConfig.appId}`);
 
                 if (qlikServerConfig.linkNewAppToCI) {
