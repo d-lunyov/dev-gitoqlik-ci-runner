@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.7.2",
+    "child_process": "^1.0.2",
     "qrs-interact": "^6.3.1",
     "qsocks": "^3.2.1"
   }
