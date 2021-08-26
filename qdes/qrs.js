@@ -50,7 +50,7 @@ function createApp(qlikServer, appName) {
                 gzip: true,
                 json: true
             };
-            let finalBody = {"data": {"type": "App", "attributes": {"name": appName}}};
+            let finalBody = JSON.stringify({"data": {"type": "App", "attributes": {"name": appName}}});
 
             var req = https.request(requestParams, (res) => {
                 var responseString = "";
