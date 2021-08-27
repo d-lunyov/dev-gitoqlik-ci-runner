@@ -41,14 +41,6 @@ const pushCommitChanges = function() {
                 args.push(`-e`);args.push(argv.GITLAB_USER_EMAIL);
                 args.push(`-t`);args.push(argv.CI_GIT_TOKEN);
                 args.push(`-b`);args.push(argv.CI_DEFAULT_BRANCH);
-
-                /*// Remove https://gitlab-ci-token:[MASKED]@ from repo url
-                let repoURL = argv.CI_REPOSITORY_URL;
-                let dogIndex = repoURL.indexOf(`@`);
-                let repoURLWithoutCredentials = repoURL.substring(0, dogIndex + 1);
-                args.push(`-r`);args.push(repoURLWithoutCredentials);
-                */
-
                 args.push(`-r`);args.push(argv.CI_REPOSITORY_URL);
 
                 break;
