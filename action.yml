@@ -2,4 +2,4 @@ name: 'Gitoqlik CI process action'
 description: 'Updates Qlik applications with Gitoqlik repository data'
 runs:
   using: 'node12'
-  main: 'app.js -SERVER_TYPE GITHUB -GITHUB_USER_NAME $GITHUB_USER_NAME -GITHUB_USER_EMAIL $GITHUB_USER_EMAIL'
+  main: 'app.js'

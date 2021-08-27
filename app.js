@@ -168,4 +168,7 @@ const start = async function() {
     process.exit(0);
 }
 
+log(`environment`);
+log(process.env);
+log(`end environment`);
 start();

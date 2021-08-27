@@ -37,8 +37,8 @@ const pushCommitChanges = function() {
         switch (serverType) {
             case `GITHUB`:
                 shellWorker = `./pushConfigChanges_github.sh`;
-                args.push(`-GITHUB_USER_NAME ${argv.GITHUB_USER_NAME}`);
-                args.push(`-GITHUB_USER_EMAIL ${argv.GITHUB_USER_EMAIL}`);
+                args.push(`-GITHUB_USER_NAME gitoqlik_ci_update`);
+                args.push(`-GITHUB_USER_EMAIL gitoqlik_ci@exmaple.com`);
                 break;
             case `GITLAB`:
                 shellWorker = `./pushConfigChanges_gitlab.sh`;
