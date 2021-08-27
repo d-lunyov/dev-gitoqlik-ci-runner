@@ -47,7 +47,7 @@ const pushCommitChanges = function() {
             default:
                 shellWorker = `./pushConfigChanges_github.sh`;
                 args.push(`-GITHUB_USER_NAME`);args.push(`gitoqlik_ci_update`);
-                args.push(`-GITHUB_USER_EMAIL`);args.push(`gitoqlik_ci@exmaple.com`);
+                args.push(`-GITHUB_USER_EMAIL`);args.push(`gitoqlik_ci@example.com`);
                 break;
         }
 
