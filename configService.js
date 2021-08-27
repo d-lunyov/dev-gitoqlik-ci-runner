@@ -35,11 +35,6 @@ const pushCommitChanges = function() {
         let shellWorker = `./pushConfigChanges_github.sh`;
         const args = [];
         switch (serverType) {
-            case `GITHUB`:
-                shellWorker = `./pushConfigChanges_github.sh`;
-                args.push(`-GITHUB_USER_NAME gitoqlik_ci_update`);
-                args.push(`-GITHUB_USER_EMAIL gitoqlik_ci@exmaple.com`);
-                break;
             case `GITLAB`:
                 shellWorker = `./pushConfigChanges_gitlab.sh`;
                 args.push(`-GITLAB_USER_NAME ${argv.GITLAB_USER_NAME}`);
@@ -47,6 +42,12 @@ const pushCommitChanges = function() {
                 args.push(`-CI_GIT_TOKEN ${argv.CI_GIT_TOKEN}`);
                 args.push(`-CI_REPOSITORY_URL ${argv.CI_REPOSITORY_URL}`);
                 args.push(`-CI_DEFAULT_BRANCH ${argv.CI_DEFAULT_BRANCH}`);
+                break;
+            case `GITHUB`:
+            default:
+                shellWorker = `./pushConfigChanges_github.sh`;
+                args.push(`-GITHUB_USER_NAME gitoqlik_ci_update`);
+                args.push(`-GITHUB_USER_EMAIL gitoqlik_ci@exmaple.com`);
                 break;
         }
 
