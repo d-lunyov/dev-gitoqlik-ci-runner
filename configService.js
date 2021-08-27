@@ -51,6 +51,7 @@ const pushCommitChanges = function() {
                 break;
         }
 
+        log(`Calling ${shellWorker} ${args.join(" ")}`);
         const app = spawn(`sh`, [path.join(__dirname, shellWorker), ...args], { stdio: 'inherit' });
         app.on('close', code => {
             if(code !== 0){
