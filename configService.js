@@ -34,22 +34,25 @@ const pushCommitChanges = function() {
 
         let shellWorker = `./pushConfigChanges_github.sh`;
         const args = [];
-        switch (serverType) {
-            case `GITLAB`:
+        switch (serverType.toLowerCase()) {
+            case `gitlab`:
                 shellWorker = `./pushConfigChanges_gitlab.sh`;
                 args.push(`-u`);args.push(argv.GITLAB_USER_NAME);
                 args.push(`-e`);args.push(argv.GITLAB_USER_EMAIL);
                 args.push(`-t`);args.push(argv.CI_GIT_TOKEN);
                 args.push(`-b`);args.push(argv.CI_DEFAULT_BRANCH);
 
-                // Remove https://gitlab-ci-token:[MASKED]@ from repo url
+                /*// Remove https://gitlab-ci-token:[MASKED]@ from repo url
                 let repoURL = argv.CI_REPOSITORY_URL;
                 let dogIndex = repoURL.indexOf(`@`);
                 let repoURLWithoutCredentials = repoURL.substring(0, dogIndex + 1);
-
                 args.push(`-r`);args.push(repoURLWithoutCredentials);
+                */
+
+                args.push(`-r`);args.push(argv.CI_REPOSITORY_URL);
+
                 break;
-            case `GITHUB`:
+            case `github`:
             default:
                 shellWorker = `./pushConfigChanges_github.sh`;
                 args.push(`-u`);args.push(`gitoqlik_ci_update`);
