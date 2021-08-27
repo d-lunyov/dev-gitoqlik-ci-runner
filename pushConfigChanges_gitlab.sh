@@ -1,13 +1,13 @@
 #!/bin/sh
 
-while getopts GITLAB_USER_NAME:GITLAB_USER_EMAIL:CI_GIT_TOKEN:CI_REPOSITORY_URL:CI_DEFAULT_BRANCH: flag
+while getopts u:r:t:r:b: flag
 do
     case "${flag}" in
-        GITLAB_USER_NAME) GITLAB_USER_NAME=${OPTARG};;
-        GITLAB_USER_EMAIL) GITLAB_USER_EMAIL=${OPTARG};;
-        CI_GIT_TOKEN) CI_GIT_TOKEN=${OPTARG};;
-        CI_REPOSITORY_URL) CI_REPOSITORY_URL=${OPTARG};;
-        CI_DEFAULT_BRANCH) CI_DEFAULT_BRANCH=${OPTARG};;
+        u) GITLAB_USER_NAME=${OPTARG};;
+        r) GITLAB_USER_EMAIL=${OPTARG};;
+        t) CI_GIT_TOKEN=${OPTARG};;
+        r) CI_REPOSITORY_URL=${OPTARG};;
+        b) CI_DEFAULT_BRANCH=${OPTARG};;
     esac
 done
 
