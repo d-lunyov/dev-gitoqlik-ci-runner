@@ -37,17 +37,17 @@ const pushCommitChanges = function() {
         switch (serverType) {
             case `GITLAB`:
                 shellWorker = `./pushConfigChanges_gitlab.sh`;
-                args.push(`-GITLAB_USER_NAME ${argv.GITLAB_USER_NAME}`);
-                args.push(`-GITLAB_USER_EMAIL ${argv.GITLAB_USER_EMAIL}`);
-                args.push(`-CI_GIT_TOKEN ${argv.CI_GIT_TOKEN}`);
-                args.push(`-CI_REPOSITORY_URL ${argv.CI_REPOSITORY_URL}`);
-                args.push(`-CI_DEFAULT_BRANCH ${argv.CI_DEFAULT_BRANCH}`);
+                args.push(`-GITLAB_USER_NAME`);args.push(argv.GITLAB_USER_NAME);
+                args.push(`-GITLAB_USER_EMAIL`);args.push(argv.GITLAB_USER_EMAIL);
+                args.push(`-CI_GIT_TOKEN`);args.push(argv.CI_GIT_TOKEN);
+                args.push(`-CI_REPOSITORY_URL`);args.push(argv.CI_REPOSITORY_URL);
+                args.push(`-CI_DEFAULT_BRANCH`);args.push(argv.CI_DEFAULT_BRANCH);
                 break;
             case `GITHUB`:
             default:
                 shellWorker = `./pushConfigChanges_github.sh`;
-                args.push(`-GITHUB_USER_NAME gitoqlik_ci_update`);
-                args.push(`-GITHUB_USER_EMAIL gitoqlik_ci@exmaple.com`);
+                args.push(`-GITHUB_USER_NAME`);args.push(`gitoqlik_ci_update`);
+                args.push(`-GITHUB_USER_EMAIL`);args.push(`gitoqlik_ci@exmaple.com`);
                 break;
         }
 
