@@ -1,0 +1,20 @@
+name: Gitoqlik CI workflow
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+    types: [closed]
+jobs:
+  call-gitoqlik-ci-action:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    name: Job will run public Gitoqlik CI action from dev-gitoqlik-ci-runner repo
+    steps:
+      - run: sudo -- sh -c -e "echo '62.84.44.14     sense-dnx' >> /etc/hosts";
+      - run: cat /etc/hosts
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Run script
+        id: Gitoqlik_CI_action
+        uses: d-lunyov/dev-gitoqlik-ci-runner@v1.45

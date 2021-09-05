@@ -1,0 +1,15 @@
+image: node:12
+
+stages:          # List of stages for jobs, and their order of execution
+  - gitoqik-ci
+
+
+gitoqik-ci:
+  stage: gitoqik-ci
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH && $CI_COMMIT_MESSAGE =~ /^Merge branch.*/'
+  script:
+    - export
+    - echo '62.84.44.14     sense-dnx' >> /etc/hosts
+    - git clone --depth 50 https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/dm-lunyov/dev-gitoqlik-ci-runner.git
+    - node dev-gitoqlik-ci-runner/app --SERVER_TYPE gitlab --GITLAB_USER_NAME ${GITLAB_USER_LOGIN} --GITLAB_USER_EMAIL ${GITLAB_USER_EMAIL} --CI_GIT_TOKEN ${CI_GIT_TOKEN} --CI_REPOSITORY_URL ${CI_REPOSITORY_URL} --CI_DEFAULT_BRANCH ${CI_DEFAULT_BRANCH}
