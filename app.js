@@ -21,6 +21,7 @@ const openQsocks = async function(qlikServerConfig) {
         config.headers = {
             "Authorization": `Bearer ${qlikServerConfig.jwt.token}`
         };
+        config.prefix = qlikServerConfig.jwt.virtualProxyPrefix;
     } else if (authMethod === "cert") {
         config.ca = [configService.getCertificate(qlikServerConfig.ca)];
         config.key = configService.getCertificate(qlikServerConfig.key);
