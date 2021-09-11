@@ -6,18 +6,31 @@ const qdes = require(`./qdes/qdes`);
 const qrs = require(`./qdes/qrs`);
 
 const openQsocks = async function(qlikServerConfig) {
-    return qsocks.Connect({
-        ca: [configService.getCertificate(qlikServerConfig.ca)],
-        key: configService.getCertificate(qlikServerConfig.key),
-        cert: configService.getCertificate(qlikServerConfig.cert),
+    const config = {
         isSecure: true,
         host: qlikServerConfig.host,
-        port: qlikServerConfig.port || 4747,
-        headers: {
-            "X-Qlik-User": `UserDirectory=${encodeURIComponent(qlikServerConfig.userDirectory)}; UserId=${encodeURIComponent(qlikServerConfig.userId)}`,
-        },
+        port: qlikServerConfig.wsPort || 4747,
         debug: false
-    });
+    };
+    let authMethod = configService.getAuthMethod(qlikServerConfig);
+    if (!authMethod) {
+        return Promise.reject(new Error(`Invalid authentication config for the server ${qlikServerConfig.host}`));
+    }
+
+    if (authMethod === "jwt") {
+        config.headers = {
+            "Authorization": `Bearer ${qlikServerConfig.jwt.token}`
+        };
+    } else if (authMethod === "cert") {
+        config.ca = [configService.getCertificate(qlikServerConfig.ca)];
+        config.key = configService.getCertificate(qlikServerConfig.key);
+        config.cert = configService.getCertificate(qlikServerConfig.cert);
+        config.headers = {
+            "X-Qlik-User": `UserDirectory=${encodeURIComponent(qlikServerConfig.userDirectory)}; UserId=${encodeURIComponent(qlikServerConfig.userId)}`,
+        };
+    }
+
+    return qsocks.Connect(config);
 }
 
 const createApp = async function(connection, appName) {

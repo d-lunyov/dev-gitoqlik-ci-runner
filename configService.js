@@ -66,9 +66,22 @@ const pushCommitChanges = function() {
     });
 }
 
+const getAuthMethod = function(config) {
+    if (config.jwt && config.jwt.token) {
+        return "jwt";
+    }
+
+    if (config.ca && config.key && config.cert) {
+        return "cert";
+    }
+
+    return null;
+}
+
 module.exports = {
     getQlikServers,
     getCertificate,
     writeQlikServers,
-    pushCommitChanges
+    pushCommitChanges,
+    getAuthMethod
 }
