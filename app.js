@@ -97,9 +97,10 @@ const start = async function() {
             continue;
         }
 
+        let connection;
         try {
             log(`Connecting to the ${qlikServerConfig.host}:${qlikServerConfig.port || 4747}...`);
-            const connection = await openQsocks(qlikServerConfig);
+            connection = await openQsocks(qlikServerConfig);
             log(`Connection success`)
 
             if (qlikServerConfig.createNewApp) {
@@ -160,9 +161,11 @@ const start = async function() {
             } else {
                 log(`Update success`);
             }
+            connection.close();
         } catch(error) {
             log(`Skipping ${qlikServerConfig.host}`);
             log(`ERROR: `, error);
+            connection && connection.close();
             continue;
         }
     }
