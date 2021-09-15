@@ -163,12 +163,17 @@ const start = async function() {
             } else {
                 log(`Update success`);
             }
-            connection.close();
+            if (connection && connection.connection && connection.connection.ws
+                && connection.connection.ws.readyState === WebSocket.OPEN) {
+                connection.connection.ws.close();
+            }
         } catch(error) {
             log(`ERROR: `, error);
             log(`Skipping ${qlikServerConfig.host}`);
-            connection && connection.close();
-            continue;
+            if (connection && connection.connection && connection.connection.ws
+                && connection.connection.ws.readyState === WebSocket.OPEN) {
+                connection.connection.ws.close();
+            }
         }
     }
 
