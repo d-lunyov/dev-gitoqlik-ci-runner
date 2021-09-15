@@ -10,7 +10,7 @@ const openQsocks = async function(qlikServerConfig) {
         isSecure: true,
         host: qlikServerConfig.host,
         port: qlikServerConfig.wsPort || 4747,
-        debug: false
+        debug: true
     };
     let authMethod = configService.getAuthMethod(qlikServerConfig);
     log(`Using ${authMethod} authorization...`);
@@ -164,14 +164,14 @@ const start = async function() {
                 log(`Update success`);
             }
             if (connection && connection.connection && connection.connection.ws
-                && connection.connection.ws.readyState === WebSocket.OPEN) {
+                && connection.connection.ws.readyState === 1) {
                 connection.connection.ws.close();
             }
         } catch(error) {
             log(`ERROR: `, error);
             log(`Skipping ${qlikServerConfig.host}`);
             if (connection && connection.connection && connection.connection.ws
-                && connection.connection.ws.readyState === WebSocket.OPEN) {
+                && connection.connection.ws.readyState === 1) {
                 connection.connection.ws.close();
             }
         }
