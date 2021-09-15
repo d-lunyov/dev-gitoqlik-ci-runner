@@ -10,7 +10,7 @@ const updateQlikAppcontentFiles = function (files, qlikServerConfig) {
     log(`[QRS] Connecting to ${qlikServerConfig.host}...`);
     const config = {
         hostname: qlikServerConfig.host,
-        portNumber: qlikServerConfig.qrsPort
+        portNumber: qlikServerConfig.qrsPort || 4242
     };
 
     let authMethod = configService.getAuthMethod(qlikServerConfig);
@@ -22,6 +22,7 @@ const updateQlikAppcontentFiles = function (files, qlikServerConfig) {
             "Authorization": `Bearer ${qlikServerConfig.jwt.token}`
         };
         config.virtualProxyPrefix = qlikServerConfig.jwt.virtualProxyPrefix;
+        config.certificates = {};
     } else if (authMethod === "cert") {
         config.certificates = {
             certFile: qlikServerConfig.cert,

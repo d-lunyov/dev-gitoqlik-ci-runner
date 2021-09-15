@@ -13,6 +13,7 @@ const openQsocks = async function(qlikServerConfig) {
         debug: false
     };
     let authMethod = configService.getAuthMethod(qlikServerConfig);
+    log(`Using ${authMethod} authorization...`);
     if (!authMethod) {
         return Promise.reject(new Error(`Invalid authentication config for the server ${qlikServerConfig.host}`));
     }
@@ -90,7 +91,7 @@ const start = async function() {
 
     log(`Reading Gitoqlik application data...`);
     const appData = await appDataReader.getAppData();
-    log(`Read Gitoqlik application data success`, appData);
+    log(`Read Gitoqlik application data success`);
 
     for (let i = 0; i < qlikServers.length; i++) {
         const qlikServerConfig = qlikServers[i];
@@ -164,8 +165,8 @@ const start = async function() {
             }
             connection.close();
         } catch(error) {
-            log(`Skipping ${qlikServerConfig.host}`);
             log(`ERROR: `, error);
+            log(`Skipping ${qlikServerConfig.host}`);
             connection && connection.close();
             continue;
         }
@@ -185,7 +186,4 @@ const start = async function() {
     process.exit(0);
 }
 
-log(`environment`);
-log(process.env);
-log(`end environment`);
 start();
