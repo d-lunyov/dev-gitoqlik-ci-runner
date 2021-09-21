@@ -19,9 +19,9 @@ const updateQlikAppcontentFiles = function (files, qlikServerConfig) {
     }
     if (authMethod === "jwt") {
         config.headers = {
-            "Authorization": `Bearer ${qlikServerConfig.jwt.token}`
+            "Authorization": `Bearer ${qlikServerConfig.jwtToken}`
         };
-        config.virtualProxyPrefix = qlikServerConfig.jwt.virtualProxyPrefix;
+        config.virtualProxyPrefix = qlikServerConfig.jwtVirtualProxyPrefix;
         config.certificates = {};
     } else if (authMethod === "cert") {
         config.certificates = {

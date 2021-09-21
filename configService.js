@@ -67,12 +67,12 @@ const pushCommitChanges = function() {
 }
 
 const getAuthMethod = function(config) {
-    if (config.jwt && config.jwt.token) {
-        return "jwt";
-    }
-
     if (config.ca && config.key && config.cert) {
         return "cert";
+    }
+
+    if (config.jwtToken && config.jwtVirtualProxyPrefix) {
+        return "jwt";
     }
 
     return null;
