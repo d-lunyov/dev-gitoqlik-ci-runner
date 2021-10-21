@@ -30,7 +30,7 @@ const pushCommitChanges = function() {
     return new Promise((resolve, reject) => {
         const argv = require('minimist')(process.argv.slice(2));
         log(`Available CI variables: `, argv);
-        const serverType = argv.SERVER_TYPE;
+        const serverType = argv.SERVER_TYPE || "github";
 
         let shellWorker = `./pushConfigChanges_github.sh`;
         const args = [];
